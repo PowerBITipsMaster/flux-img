@@ -1,0 +1,199 @@
+:root {
+    --primary-color: #00ff9d;
+    --bg-dark: #0a0b0f;
+    --bg-card: #16181d;
+    --text-primary: #ffffff;
+    --text-secondary: #8b8d91;
+    --nav-width: 1000px;
+}
+
+/* 复用现有的基础样式 */
+body {
+    font-family: 'Rajdhani', sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* 导航栏样式保持一致 */
+nav {
+    position: relative;
+    overflow: hidden;
+    background: var(--bg-card);
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(0, 255, 157, 0.2);
+}
+
+nav::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(0, 255, 157, 0.1) 0%, transparent 50%);
+    animation: rotate 15s linear infinite;
+}
+
+.nav-container {
+    max-width: var(--nav-width);
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
+    color: var(--primary-color);
+    font-size: 1.5em;
+}
+
+/* 价格卡片样式 */
+.price-section {
+    padding: 2rem;
+    background: var(--bg-card);
+    border-radius: 12px;
+    border: 1px solid rgba(0, 255, 157, 0.1);
+    margin-top: 2rem;
+}
+
+.price-section h1 {
+    color: var(--primary-color);
+    font-family: 'Orbitron', sans-serif;
+    text-align: center;
+    margin-bottom: 2rem;
+    letter-spacing: 2px;
+}
+
+.price-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 1rem;
+}
+
+.price-card {
+    background: rgba(10, 11, 15, 0.8);
+    border: 1px solid rgba(0, 255, 157, 0.2);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.price-card:hover {
+    transform: translateY(-5px);
+}
+
+.price-card.featured {
+    border: 2px solid var(--primary-color);
+    box-shadow: 0 0 20px rgba(0, 255, 157, 0.2);
+}
+
+.price-card h2 {
+    color: var(--primary-color);
+    font-family: 'Orbitron', sans-serif;
+    margin-bottom: 1rem;
+}
+
+.price-card .price {
+    font-size: 2rem;
+    color: var(--text-primary);
+    margin-bottom: 2rem;
+}
+
+.price-card ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 2rem;
+}
+
+.price-card ul li {
+    color: var(--text-secondary);
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(0, 255, 157, 0.1);
+}
+
+.cta-button {
+    background: var(--primary-color);
+    color: var(--bg-dark);
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: 'Rajdhani', sans-serif;
+}
+
+.cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(0, 255, 157, 0.4);
+}
+
+/* Footer样式 */
+footer {
+    margin-top: 3rem;
+    padding: 2rem 0;
+    background: var(--bg-card);
+    border-top: 1px solid rgba(0, 255, 157, 0.2);
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .price-cards {
+        grid-template-columns: 1fr;
+    }
+    
+    .price-card {
+        margin: 1rem 0;
+    }
+}
+
+/* 导航链接样式 */
+.nav-links a {
+    color: var(--text-primary);
+    text-decoration: none;
+    margin-left: 2rem;
+    transition: color 0.3s;
+    font-family: 'Rajdhani', sans-serif;
+}
+
+.nav-links a:hover {
+    color: var(--primary-color);
+}
+
+.nav-links a.active {
+    color: var(--primary-color);
+    position: relative;
+}
+
+.nav-links a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--primary-color);
+    box-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
+} 

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 图像生成器</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Rajdhani:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00ff9d;
+            --bg-dark: #0a0b0f;
+            --bg-card: #16181d;
+            --text-primary: #ffffff;
+            --text-secondary: #8b8d91;
+            --nav-width: 1000px;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 导航栏样式 */
+        nav {
+            position: relative;
+            overflow: hidden;
+            background: var(--bg-card);
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0, 255, 157, 0.2);
+        }
+
+        nav::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 255, 157, 0.1) 0%, transparent 50%);
+            animation: rotate 15s linear infinite;
+        }
+
+        .nav-container {
+            max-width: var(--nav-width);
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
+            color: var(--primary-color);
+            font-size: 1.5em;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            margin-left: 2rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* 主要内容区域 */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        /* ���示词输入区域 */
+        .prompt-section {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 255, 157, 0.1);
+        }
+
+        .prompt-textarea {
+            width: 100%;
+            height: 150px;
+            background: rgba(10, 11, 15, 0.8);
+            border: 1px solid rgba(0, 255, 157, 0.3);
+            border-radius: 8px;
+            color: var(--text-primary);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            resize: none;
+        }
+
+        .generate-btn {
+            background: var(--primary-color);
+            color: var(--bg-dark);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 255, 157, 0.4);
+        }
+
+        /* 生成中区域 */
+        .generating-section {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 255, 157, 0.1);
+        }
+
+        .loading-indicator {
+            width: 100%;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed rgba(0, 255, 157, 0.3);
+            border-radius: 8px;
+        }
+
+        /* 图片展示区域 */
+        .gallery-section {
+            grid-column: 1 / -1;
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 255, 157, 0.1);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 1;
+            background: rgba(10, 11, 15, 0.8);
+            border: 1px solid rgba(0, 255, 157, 0.2);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Footer样式 */
+        footer {
+            margin-top: 3rem;
+            padding: 2rem 0;
+            background: var(--bg-card);
+            border-top: 1px solid rgba(0, 255, 157, 0.2);
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        /* 标题样式 */
+        .section-title {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.2em;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* 添加 FAQ 部分 */
+        .faq-section {
+            grid-column: 1 / -1;
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 255, 157, 0.1);
+            margin-top: 2rem;
+        }
+
+        .faq-item {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border: 1px solid rgba(0, 255, 157, 0.1);
+            border-radius: 8px;
+            background: rgba(10, 11, 15, 0.8);
+        }
+
+        .faq-question {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.1em;
+        }
+
+        .faq-answer {
+            color: var(--text-secondary);
+        }
+
+        /* 添加全局光晕效果 */
+        .glow-effect {
+            position: relative;
+        }
+
+        .glow-effect::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: inherit;
+            box-shadow: 0 0 20px rgba(0, 255, 157, 0.2);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .glow-effect:hover::after {
+            opacity: 1;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">NEXUS AI</div>
+            <div class="nav-links">
+                <a href="index.html" class="active">Home</a>
+                <a href="price.html">Price</a>
+                <a href="#">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="main-content">
+            <!-- 提示词输入区 -->
+            <section class="prompt-section glow-effect">
+                <h2 class="section-title">Prompt Input</h2>
+                <textarea class="prompt-textarea" placeholder="Enter your detailed image description..."></textarea>
+                <button class="generate-btn">Generate</button>
+            </section>
+
+            <!-- 生成中区域 -->
+            <section class="generating-section glow-effect">
+                <h2 class="section-title">Processing</h2>
+                <div class="loading-indicator">
+                    <span>Generating image...</span>
+                </div>
+            </section>
+
+            <!-- 图片展示区 -->
+            <section class="gallery-section glow-effect">
+                <h2 class="section-title">Generated Images</h2>
+                <div class="gallery-grid">
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/300" alt="生成的图片">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/300" alt="生成的图片">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/300" alt="生成的图片">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/300" alt="生成的图片">
+                    </div>
+                </div>
+            </section>
+
+            <!-- 新增 FAQ 部分 -->
+            <section class="faq-section glow-effect">
+                <h2 class="section-title">Frequently Asked Questions</h2>
+                <div class="faq-item">
+                    <div class="faq-question">How does the AI image generation work?</div>
+                    <div class="faq-answer">Our AI system uses advanced machine learning algorithms to transform your text descriptions into unique, high-quality images.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">What types of images can I generate?</div>
+                    <div class="faq-answer">You can generate a wide range of images including landscapes, portraits, abstract art, and conceptual illustrations.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">How long does image generation take?</div>
+                    <div class="faq-answer">Most images are generated within 30-60 seconds, depending on complexity and server load.</div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2024 NEXUS AI. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
